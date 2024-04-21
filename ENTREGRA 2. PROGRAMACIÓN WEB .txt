@@ -1,0 +1,143 @@
+ENTREGRA 2. PROGRAMACIÓN WEB 
+
+REACTIVIDAD EN VUE 3
+Diferencias entre las Funciones Ref y Reactive en Vue 3:
+
+1. Función Ref:
+   - Se utiliza para crear un valor reactivado simple.
+   - Devuelve un objeto con una propiedad 'value' que contiene el valor.
+   - Útil para crear variables simples.
+
+2. Función Reactive:
+   - Se utiliza para crear un objeto reactivado.
+   - Devuelve un objeto proxy que envuelve el objeto original y hace que todas sus propiedades sean reactivas.
+   - Útil para manejar objetos complejos con múltiples propiedades.
+
+3. Acceso a los datos:
+   - Función Ref: El valor reactivado se accede a través de la propiedad 'value'.
+   - Función Reactive: Las propiedades del objeto reactivado pueden ser accedidas directamente.
+
+4. Mutabilidad:
+   - Función Ref: El valor reactivado es mutable y puede ser actualizado directamente.
+   - Función Reactive: Las propiedades del objeto reactivado son mutables y pueden ser actualizadas directamente.
+
+5. Reactividad Profunda:
+   - Función Ref: No proporciona reactividad profunda. Las propiedades internas del objeto reactivado no son reactivas.
+   - Función Reactive: Proporciona reactividad profunda. Si una propiedad del objeto reactivado es un objeto, sus propiedades también serán reactivas.
+
+Ejemplo de Función Ref:
+import { ref } from 'vue';
+
+const count = ref(0);
+
+// Modificar el valor
+count.value++; // Esto actualizará automáticamente los componentes que utilizan count
+
+Ejemplo de Función Reactive:
+import { reactive } from 'vue';
+
+const state = reactive({
+  count: 0,
+  message: 'Hello'
+});
+
+// Modificar las propiedades
+state.count++;
+state.message = 'Goodbye'; // Las actualizaciones se reflejarán automáticamente en los componentes
+
+ 
+
+Computed y Watch. Ejemplos de uso funcionando de cada una. 
+
+Ejemplo de computed:
+// Importamos las funciones ref y computed desde Vue
+import { ref, computed } from 'vue';
+
+// Creamos una variable reactiva utilizando ref
+const count = ref(0);
+
+// Creamos una propiedad computada que dobla el valor de count
+const doubledCount = computed(() => count.value * 2);
+
+// Creamos un componente Vue
+const App = {
+  // Utilizamos la propiedad setup para inicializar nuestros datos reactivos
+  setup() {
+    // Devolvemos los datos reactivos y la propiedad computada
+    return { count, doubledCount };
+  }
+};
+
+// Montamos el componente en el elemento con el id "app"
+Vue.createApp(App).mount('#app');
+
+Ejemplo de watch:
+
+// Importamos las funciones ref y watch desde Vue
+import { ref, watch } from 'vue';
+
+// Creamos una variable reactiva utilizando ref
+const count = ref(0);
+
+// Creamos un componente Vue
+const App = {
+  // Utilizamos la propiedad setup para inicializar nuestros datos reactivos
+  setup() {
+    // Utilizamos la función watch para observar cambios en count
+    watch(count, (newValue, oldValue) => {
+      console.log(`El valor ha cambiado de ${oldValue} a ${newValue}`);
+    });
+
+    // Devolvemos los datos reactivos
+    return { count };
+  }
+};
+
+// Montamos el componente en el elemento con el id "app"
+Vue.createApp(App).mount('#app');
+
+REACTIVIDAD EN SVELTE
+
+Dos ejemplos funcionando con declaraciones reactivas en Svelte. 
+
+Ejemplo 1: Contador
+<script>
+  // Declaración reactiva para el contador
+  let count = 0;
+
+  // Función para incrementar el contador
+  function increment() {
+    count++;
+  }
+</script>
+
+<!-- Interfaz de usuario -->
+<button on:click={increment}>
+  Incrementar contador
+</button>
+
+<p>El contador es: {count}</p>
+
+En este ejemplo, la variable count se declara de forma reactiva. Cada vez que se hace clic en el botón, se invoca la función increment que aumenta el valor de count, y como count es reactiva, la interfaz de usuario se actualiza automáticamente.
+
+
+Ejemplo 2: Saludo personalizado
+
+<script>
+  // Declaración reactiva para el nombre
+  let name = '';
+
+  // Declaración reactiva para el saludo personalizado
+  $: greeting = `Hola, ${name}!`;
+
+  // Función para manejar cambios en el nombre
+  function handleChange(event) {
+    name = event.target.value;
+  }
+</script>
+
+<!-- Interfaz de usuario -->
+<input type="text" bind:value={name} on:input={handleChange}>
+<p>{greeting}</p>
+
+En este ejemplo, la variable name se declara de forma reactiva. Cada vez que el usuario escribe en el campo de entrada, la función handleChange se activa, actualizando el valor de name. Como name es una declaración reactiva, la variable greeting también se actualiza automáticamente, lo que resulta en un saludo personalizado en tiempo real.
